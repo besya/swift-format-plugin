@@ -4,29 +4,19 @@ import PackagePlugin
 @main
 struct Lint {
   let toolName = "swift-format"
-}
 
-extension Lint: CommandPlugin {
-  func performCommand(context: PackagePlugin.PluginContext, arguments: [String])
-    async throws
-  {
+  func lint(for directoryURL: URL, using tool: PluginContext.Tool) throws {
+    let swiftFormatURL = tool.url
 
-    let swiftFormat = try context.tool(named: "swift-format")
-
-    let sourcesDir = context.package.directoryURL
+    let arguments = [
+      "lint", "--recursive", "--parallel", "--strict", directoryURL.path(),
+    ]
 
     let outputPipe = Pipe()
 
     let process = Process()
-    process.executableURL = swiftFormat.url
-    process.arguments = [
-      "lint",
-      "--strict",
-      "--parallel",
-      "--recursive",
-      sourcesDir.path(),
-    ]
-
+    process.executableURL = swiftFormatURL
+    process.arguments = arguments
     process.standardOutput = outputPipe
     process.standardError = outputPipe
 
@@ -37,19 +27,17 @@ extension Lint: CommandPlugin {
       process.waitUntilExit()
 
       if process.terminationStatus != 0 {
-        displayDiagnostics(for: outputData, in: context)
+        showDiagnostics(for: outputData, in: directoryURL)
       } else {
-        print("Linting completed successfully")
+        print("Linting completed successfully.")
       }
     } catch {
       Diagnostics
         .error("Error running swift-format: \(error)")
     }
   }
-}
 
-extension Lint {
-  func displayDiagnostics(for data: Data, in context: PluginContext) {
+  func showDiagnostics(for data: Data, in directoryURL: URL) {
     guard let output = String(data: data, encoding: .utf8) else {
       Diagnostics.error("Failed to decode swift-format output")
       return
@@ -66,8 +54,14 @@ extension Lint {
       }
 
       let filePath = String(components[0])
-      let lineNum = String(components[1])
-      let columnNum = String(components[2])
+      let relativePath = filePath.replacingOccurrences(
+        of: directoryURL.path(),
+        with: ""
+      )
+
+      let line = Int(String(components[1]))
+      // let columnNum = Int(String(components[2]))
+      // let file = directoryURL.appending(path: relativePath).path()
 
       let severityType = String(components[3]).trimmingCharacters(
         in: .whitespaces
@@ -84,16 +78,26 @@ extension Lint {
         continue
       }
 
-      let description =
-        "\(filePath):\(lineNum):\(columnNum): \(severityType): \(message)\n"
+      let description = "\(message) in \(relativePath)\n"
 
       Diagnostics
         .emit(
           severity,
           description,
-          file: filePath,
-          line: Int(lineNum)
+          file: relativePath,
+          line: line
         )
     }
+  }
+}
+
+extension Lint: CommandPlugin {
+  func performCommand(
+    context: PluginContext,
+    arguments: [String]
+  ) async throws {
+    let swiftFormatTool = try context.tool(named: toolName)
+    let sourcesDirectoryURL = context.package.directoryURL
+    try lint(for: sourcesDirectoryURL, using: swiftFormatTool)
   }
 }
