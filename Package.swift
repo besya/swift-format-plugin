@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-  name: "SwiftFormatPlugin",
+  name: "swift-format-plugin",
   products: [
     .plugin(name: "LintOnBuild", targets: ["LintOnBuild"]),
     .plugin(name: "Lint", targets: ["Lint"]),
