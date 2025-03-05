@@ -3,7 +3,7 @@
 # SwiftFormatPlugin
 **NOTICE: This library is under active development and is not ready for use in production or any other environment. Use at your own risk.**
 
-Current version: 0.0.2 (unstable, experimental)
+Current version: 0.0.4 (unstable, experimental)
 
 This package uses Xcode's built-in `swift-format` tool for lint or format code.
 
@@ -20,7 +20,7 @@ let package = Package(
   // name, platforms, products, etc.
   dependencies: [
     // other dependencies
-    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.2"),
+    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.4"),
   ],
 )
 ```
@@ -41,7 +41,7 @@ let package = Package(
   // name, platforms, products, etc.
   dependencies: [
     // other dependencies
-    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.2"),
+    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.4"),
   ],
   targets: [
     .target(
