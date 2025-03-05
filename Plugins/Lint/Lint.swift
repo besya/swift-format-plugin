@@ -15,8 +15,6 @@ extension Lint: CommandPlugin {
 
     let sourcesDir = context.package.directoryURL
 
-    print("Linting \(sourcesDir.path())...")
-
     let outputPipe = Pipe()
 
     let process = Process()

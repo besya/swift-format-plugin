@@ -26,7 +26,7 @@ let package = Package(
     .plugin(
       name: "Lint",
       capability: .command(
-        intent: .custom(verb: "swift-format-lint", description: "Linting code"),
+        intent: .custom(verb: "lint-source-code", description: "Lint source code"),
       )
     ),
   ]
