@@ -25,6 +25,15 @@ let package = Package(
 )
 ```
 
+#### In terminal
+```
+> swift package plugin lint-source-code
+> swift package plugin format-source-code
+```
+
+#### In Xcode
+Right-click on package and select Format or Lint
+
 ### Lint on Build Tool
 
 ```swift
