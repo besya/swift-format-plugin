@@ -3,45 +3,70 @@
 # SwiftFormatPlugin
 **NOTICE: This library is under active development and is not ready for use in production or any other environment. Use at your own risk.**
 
-Current version: 0.0.4 (unstable, experimental)
+Current version: 0.0.5 (unstable, experimental)
 
 This package uses Xcode's built-in `swift-format` tool for lint or format code.
 
 ## Features
-- ✨ Format and Lint commands
-- 🚀 Lint diagnostics on build
+- ✨ Commands
+  - Format Project
+  - Format Target
+  - Lint Project
+  - Lint Target
+- 🚀 Lint On Build: Diagnostics on build
 
 ## Usage
 
+
 ### As Commands Plugin
+
+**Known issues** 
+ - Command from context menu in Xcode does not diagnostics in the Issue navigator. Solution: Check the Report navigator
+ - Diagnostics in Xcode's "Report navigator -> Plug-in" are not clickable
 
 ```swift
 let package = Package(
   // name, platforms, products, etc.
   dependencies: [
     // other dependencies
-    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.4"),
+    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.5"),
   ],
 )
 ```
 
 #### In terminal
 ```
-> swift package plugin lint-source-code
-> swift package plugin format-source-code
+> swift package plugin --list
+‘format’ (plugin ‘Format Project’ in package ‘swift-format-plugin’)
+‘format-target’ (plugin ‘Format Targets Source Code’ in package ‘swift-format-plugin’)
+‘lint’ (plugin ‘Lint Project’ in package ‘swift-format-plugin’)
+‘lint-target’ (plugin ‘Lint Targets Source Code’ in package ‘swift-format-plugin’)
+
+> swift package plugin lint
+> swift package plugin format
 ```
 
 #### In Xcode
-Right-click on package and select Format or Lint
+Right-click on package:
+ - Format Project
+ - Format Target
+ - Lint Project
+ - Lint Target
 
 ### Lint on Build Tool
+
+Show diagnistics warning when building project
+This feature works using `swift build` or Xcode
+
+**Known issues** 
+ - Diagnostics won't update on second build. Solution: "Product -> Clean Build Folder..." in Xcode or `swift package clean` in terminal
 
 ```swift
 let package = Package(
   // name, platforms, products, etc.
   dependencies: [
     // other dependencies
-    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.4"),
+    .package(url: "https://github.com/besya/swift-format-plugin.git", from: "0.0.5"),
   ],
   targets: [
     .target(
