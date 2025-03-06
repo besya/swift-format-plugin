@@ -2,7 +2,7 @@ import Foundation
 import PackagePlugin
 
 @main
-struct Format: CommandPlugin {
+struct FormatProject: CommandPlugin {
   func performCommand(context: PluginContext, arguments: [String]) async throws
   {
     let swiftFormat = try context.tool(named: "swift-format")

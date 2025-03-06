@@ -2,7 +2,7 @@ import Foundation
 import PackagePlugin
 
 @main
-struct Lint {
+struct LintProject {
   let toolName = "swift-format"
 
   func lint(for directoryURL: URL, using tool: PluginContext.Tool) throws {
@@ -91,7 +91,7 @@ struct Lint {
   }
 }
 
-extension Lint: CommandPlugin {
+extension LintProject: CommandPlugin {
   func performCommand(
     context: PluginContext,
     arguments: [String]
